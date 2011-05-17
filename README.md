@@ -2,6 +2,8 @@ jQuery Monthpicker
 ==================
 
 Author: [Jeremy McDuffie](mailto:jeremy.mcduffie@gmail.com)
+Copyright: &copy; 2011 Jeremy McDuffie, all rights reserved
+License: Modified BSD License
 
 A (very simple) "monthpicker" plugin for jQuery.
 

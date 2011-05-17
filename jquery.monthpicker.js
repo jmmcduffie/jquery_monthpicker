@@ -55,7 +55,7 @@
 		for (var i = 0, l = window._monthpickers.length; i < l; i++) {
 			var monthpicker = window._monthpickers[i];
 			if (!(target.data('_monthpicker') && target.data('_monthpicker') == monthpicker)
-				&& monthpicker.status == 'open') monthpicker.close();
+				&& target.closest('.monthpicker').length === 0 && monthpicker.status == 'open') monthpicker.close();
 		}
 	});
 	

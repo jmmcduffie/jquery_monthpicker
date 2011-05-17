@@ -1,8 +1,9 @@
 jQuery Monthpicker
 ==================
 
-* A (very simple) "monthpicker" plugin for jQuery.
-* Author: [Jeremy McDuffie](mailto:jeremy.mcduffie@daveramsey.com)
+Author: [Jeremy McDuffie](mailto:jeremy.mcduffie@gmail.com)
+
+A (very simple) "monthpicker" plugin for jQuery.
 
 My primary goal was to simplify the population of the new HTML5 `input[type="month"]`, which I find myself using very frequently.
 

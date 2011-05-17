@@ -2,7 +2,7 @@
  * jQuery MonthPicker
  * @author Jeremy McDuffie (jeremy.mcduffie)
  * @copyright 2011 Jeremy McDuffie
- * @license Modified BSD License
+ * @license Dual licensed under the BSD and MIT licenses
  * @version 0.1
  * @param {Number} pastYears The number of years in the past to provide as options
  * @param {Number} futureYears The number of years in the future to provide as options

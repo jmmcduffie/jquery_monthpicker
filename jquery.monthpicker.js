@@ -1,9 +1,9 @@
 /**
- * jQuery MonthPicker
+ * jQuery Monthpicker
  * @author Jeremy McDuffie (jeremy.mcduffie)
  * @copyright 2011 Jeremy McDuffie
- * @license Dual licensed under the BSD and MIT licenses
- * @version 0.1
+ * @license Dual-licensed with the BSD and MIT licenses
+ * @version 0.2
  * @param {Number} pastYears The number of years in the past to provide as options
  * @param {Number} futureYears The number of years in the future to provide as options
  * @param {String} defaultValue The default date to use (in the format 'YYYY-MM')
@@ -11,47 +11,56 @@
 
 (function($){
 	
-	var pad = function(str, len, ch, right) {
-		var str = String(str)
-			, len = parseInt(len,10) || 2
-			, ch = ch || 0;
-		while (str.length < len) {
-			if (right) str += ch;
-			else str = ch + str;
-			// Trim the string if it's too long
-			if (str.length > len) {
-				if (right) str = str.slice(0, len);
-				else str = str.slice(str.length - len);
-			}
-		}
+	/* Utilities */
+	
+	// String padding
+	var pad = function(str, len) {
+		var str = String(str), len = parseInt(len,10) || 2;
+		while (str.length < len) str = '0' + str;
 		return str;
 	};
-
+	
+	/* Plugin code */
+	
+	// Setup
 	$.fn.monthpicker = function(settings){
 		var args = $.extend($.fn.monthpicker.defaults, settings);
 		
 		// Create a monthpicker for each input and attach a focus handler
 		return this.each(function(){
 			var _this = $(this);
-			_this._monthpicker = new MonthPicker(_this, args);
-			_this.focus(function(e){
-				_this._monthpicker.open();
-			}).click(function(e) { e.stopPropagation(); });
+			_this.data('_monthpicker', new Monthpicker(_this, args));
 		});
 	};
-		
+	
+	// Establish default settings
 	$.fn.monthpicker.defaults = {
 		'pastYears': 5
 		, 'futureYears': 5
 		, 'defaultValue': null
 	};
 	
+	// i18n
 	$.fn.monthpicker.i18n = [
 		'January', 'February', 'March', 'April', 'May', 'June',
 		'July', 'August', 'September', 'October', 'November', 'December'
 	];
 	
-	var MonthPicker = (function() {
+	// Set up a container for all of the monthpickers
+	window._monthpickers = [];
+	
+	// Capture all clicks and hide datepickers which are open
+	$(document).mousedown(function(e) {
+		var target = $(e.target);
+		for (var i = 0, l = window._monthpickers.length; i < l; i++) {
+			var monthpicker = window._monthpickers[i];
+			if (!(target.data('_monthpicker') && target.data('_monthpicker') == monthpicker)
+				&& monthpicker.status == 'open') monthpicker.close();
+		}
+	});
+	
+	// Monthpicker object
+	var Monthpicker = (function() {
 		
 		/* All instance methods are cached in a closure */
 		
@@ -115,24 +124,31 @@
 				'class': 'monthpicker'
 				, 'role': 'dialog'
 			})
-				.data('input', this.input)
+				.data('_input', this.input)
 				.append(this.month, this.year)
 				.hide().appendTo(document.body);
-				
-			this.dialog.keyup(function(e) {
-				if (e.which == 27) _this.close();
-				e.preventDefault();
+			this.input.addClass('hasMonthpicker');
+			
+			/* Event handlers */
+			
+			this.input.focus(function(e) {
+				_this.open(); // Open on focus
+			})
+			.keydown(function(e) {
+				var stop = false;
+				switch (e.which) {
+					case 27: // Close on escape
+						_this.close();
+						stop = true;
+						break;
+					case 9: // Close on tab away
+						_this.close();
+						break;
+				}
+				if (stop) e.preventDefault();
 			});
 			
-			this.year.keydown(function(e) {
-				if (e.which == 9) _this.close();
-			});
-			
-			$('body').click(function(event) {
-			    if (!$(event.target).closest('.monthpicker').length) {
-			        if (_this.status == 'open') _this.close();
-			    };
-			});
+			window._monthpickers.push(this);
 		};
 		
 		// Handles display of the monthpicker
@@ -144,14 +160,15 @@
 				, 'left': this.input.offset().left
 			});
 			this.dialog.fadeIn('fast');
-			this.month.focus();
 			this.status = 'open';
+			this.dialog.attr('aria-hidden', false);
 		};
 		
 		// Handles hiding of the monthpicker
 		var _close = function() {
 			this.dialog.fadeOut('fast');
 			this.status = 'closed';
+			this.dialog.attr('aria-hidden', true);
 			this.update();
 		};
 		

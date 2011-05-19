@@ -49,6 +49,7 @@ In addition to the items mentioned above, I would like to address these things a
 * Support for min and max
 * More configuration, including callbacks
 * Flexibility for what date formats the plugin will accept/return
+* Error handling (especially argument validation)
 * ThemeRoller support
 
 Copyright info

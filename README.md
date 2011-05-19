@@ -14,9 +14,9 @@ For example, `$('input[type="month"]').monthpicker()` would take care of all of 
 
 You can also pass in an object literal with any of the following configuration options:
 
-* pastYears {Number} The number of years in the past to provide as options. Default is 5.
-* futureYears {Number} The number of years in the future to provide as options. Default is 5.
-* defaultValue {String} The default date used by the monthpicker when it first opens.
+* `pastYears` {`Number`} The number of years in the past to provide as options. Default is `5`.
+* `futureYears` {`Number`} The number of years in the future to provide as options. Default is `5`.
+* `defaultValue` {`String`} The default date used by the monthpicker when it first opens.
 Defaults to `null`, which means the current date will be used.
 Always uses what is set in the `input`'s `value` attribute first.
 

@@ -83,7 +83,7 @@
 			// Create and attach the container
 			this.dialog = $('<div/>', { 'class': 'monthpicker', 'role': 'dialog' })
 				.data('_input', this.input)
-				.hide()
+				.hide().css({ 'position': 'absolute' })
 				.appendTo(document.body);
 			
 			// Create the month drop-down menu
@@ -136,20 +136,17 @@
 		var _open = function() {
 			if (this.input.val() == "") this.update();
 			this.dialog.css({
-				'position': 'absolute'
-				, 'top': this.input.offset().top+this.input.outerHeight()
+				'top': this.input.offset().top+this.input.outerHeight()
 				, 'left': this.input.offset().left
-			});
-			this.dialog.fadeIn('fast');
+			})
+				.fadeIn('fast').attr('aria-hidden', false);
 			this.status = 'open';
-			this.dialog.attr('aria-hidden', false);
 		};
 		
 		// Handles hiding of the monthpicker
 		var _close = function() {
-			this.dialog.fadeOut('fast');
+			this.dialog.fadeOut('fast').attr('aria-hidden', true);
 			this.status = 'closed';
-			this.dialog.attr('aria-hidden', true);
 			this.update();
 		};
 		

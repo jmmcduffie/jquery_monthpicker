@@ -1,11 +1,12 @@
 /**
  * jQuery Monthpicker
  * @author Jeremy McDuffie (http://jmmcduffie.com)
- * @copyright 2011 Jeremy McDuffie
+ * @copyright 2011-2012 Jeremy McDuffie
  * @license Dual-licensed with the BSD and MIT licenses
  * @param {Number} pastYears The number of years in the past to provide as options
  * @param {Number} futureYears The number of years in the future to provide as options
  * @param {String} defaultValue The default date to use (in the format 'YYYY-MM')
+ * @param {Boolean} showButtons Whether or not to show the next/prev buttons
  */
 
 (function($){
@@ -37,6 +38,7 @@
 		'pastYears': 5
 		, 'futureYears': 5
 		, 'defaultValue': null
+		, 'showButtons': true
 	};
 	
 	// i18n
@@ -79,6 +81,8 @@
 			this.open = _open;
 			this.close = _close;
 			this.update = _update;
+			this.prev = _prev;
+			this.next = _next;
 
 			// Create and attach the container
 			this.dialog = $('<div/>', { 'class': 'monthpicker', 'role': 'dialog' })
@@ -109,6 +113,22 @@
 			
 			// Set the drop-downs to the right values
 			_reset.apply(this);
+
+			if (this.args.showButtons) {
+				// Create the move backward button
+				this.back = $('<button/>', {
+					'class': 'monthpicker_back'
+					, 'text': '<'
+					, 'click': function() { _this.prev() }
+				}).prependTo(this.dialog);
+				
+				// Create the move forward button
+				this.forward = $('<button/>', {
+					'class': 'monthpicker_forward'
+					, 'text': '>'
+					, 'click': function() { _this.next() }
+				}).appendTo(this.dialog);
+			}
 			
 			/* Event handlers */
 			
@@ -134,7 +154,7 @@
 		
 		// Handles display of the monthpicker
 		var _open = function() {
-			if (this.input.val() == "") this.update();
+			if (this.input.val() === "") this.update();
 			this.dialog.css({
 				'top': this.input.offset().top+this.input.outerHeight()
 				, 'left': this.input.offset().left
@@ -163,10 +183,8 @@
 		// Updates the drop-down boxes
 		var _reset = function(month, year) {
 			
-			var month = month || null, year = year || null;
-			
 			// Figure out the default values if none were passed in
-			if (!month || !year) {
+			if (arguments.length < 2) {
 				var currentValue = this.input.val()
 					, defaultValue = this.args.defaultValue
 					, currentDate = new Date();
@@ -183,14 +201,44 @@
 			}
 			
 			this.dialog.find('option:selected').removeAttr('selected');
-			this.month.find('option[value=' + month + ']').attr('selected', 'selected');
-			this.year.find('option[value=' + year + ']').attr('selected', 'selected');
-		}
+			this.month.find('option[value="' + month + '"]').attr('selected', 'selected');
+			this.year.find('option[value="' + year + '"]').attr('selected', 'selected');
+		};
+		
+		// Utility to get the month as an int
+		var getMonthVal = function getMonthVal() {
+			return parseInt(this.input.val().slice(-2), 10)-1;
+		};
+		
+		// Utility to get the year as an int
+		var getYearVal = function getYearVal() {
+			return parseInt(this.input.val().slice(0,4), 10);
+		};
+		
+		// Moves the value back by one month
+		var _prev = function() {
+			var month = getMonthVal.apply(this), year = getYearVal.apply(this);
+			if (month === 0) {
+				month = 11;
+				year--;
+			} else month--;
+			_update.apply(this, [month, year]);
+		};
+		
+		// Moves the value forward by one month
+		var _next = function() {
+			var month = getMonthVal.apply(this), year = getYearVal.apply(this);
+			if (month === 11) {
+				month = 0;
+				year++;
+			} else month++;
+			_update.apply(this, [month, year]);
+		};
 		
 		// Send back a constructor function
 		return function(input, args) {
 			_init.apply(this, [input, args]);
-		}
+		};
 	})();
 			
 })(jQuery);

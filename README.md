@@ -3,8 +3,8 @@ jQuery Monthpicker
 
 A (very simple) "monthpicker" plugin for jQuery.
 
-My primary goal was to provide a more user-friendly way to populate an `input[type="month"]` (new in HTML5)
-as the required YYYY-MM format is not very intuitive. This is very much a work-in-progress.
+My primary goal is to provide a more user-friendly way to populate an `input[type="month"]` (new in HTML5)
+as the required YYYY-MM format is not very intuitive.
 
 Usage
 -----
@@ -19,6 +19,7 @@ You can also pass in an object literal with any of the following configuration o
 * `defaultValue` {`String`} The default date used by the monthpicker when it first opens.
 Defaults to `null`, which means the current date will be used.
 Always uses what is set in the `input`'s `value` attribute first.
+* `showButtons` {`Boolean`} Whether or not to show the next/prev buttons
 
 i18n
 ----
@@ -55,5 +56,5 @@ In addition to the items mentioned above, I would like to address these things a
 Copyright info
 --------------
 
-* Copyright &copy; 2011, Jeremy McDuffie, all rights reserved
+* Copyright &copy; 2011-2012, Jeremy McDuffie, all rights reserved
 * Dual-licensed under the BSD and MIT licenses.

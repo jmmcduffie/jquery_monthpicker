@@ -112,7 +112,7 @@
 			}
 			
 			// Set the drop-downs to the right values
-			_reset.apply(this);
+			_reset.call(this);
 
 			if (this.args.showButtons) {
 				// Create the move backward button
@@ -132,7 +132,8 @@
 			
 			/* Event handlers */
 			
-			this.input.focus(function(e) { _this.open(); }) // Open on focus
+			this.input
+				.focus(function(e) { _this.open(); }) // Open on focus
 				.keydown(function(e) {
 					var stop = false;
 					switch (e.which) {
@@ -143,11 +144,19 @@
 						case 9: // Close on tab away
 							_this.close();
 							break;
+						case 38: // Increment with up arrow
+							_this.next();
+							stop = true;
+							break;
+						case 40: // Decrement with down arrow
+							_this.prev();
+							stop = true;
+							break;
 					}
 					if (stop) e.preventDefault();
 				})
 				// Update the drop-downs if a new value has been typed in
-				.keyup(function(e) { if (_pattern.test(_this.input.val())) _reset.apply(_this); });
+				.keyup(function(e) { if (_pattern.test(_this.input.val())) _reset.call(_this); });
 			
 			window._monthpickers.push(this);
 		};
@@ -173,7 +182,7 @@
 		// Updates the value of the associated form field
 		var _update = function(month, year) {
 			if (typeof(month) != "undefined" && typeof(year) != "undefined") {
-				_reset.apply(this, [month, year]);
+				_reset.call(this, month, year);
 				this.input.val(year + "-" + pad(parseInt(month, 10) + 1));
 			} else {
 				this.input.val(this.year.val() + "-" + pad(parseInt(this.month.val(), 10) + 1));
@@ -217,27 +226,27 @@
 		
 		// Moves the value back by one month
 		var _prev = function() {
-			var month = getMonthVal.apply(this), year = getYearVal.apply(this);
+			var month = getMonthVal.call(this), year = getYearVal.call(this);
 			if (month === 0) {
 				month = 11;
 				year--;
 			} else month--;
-			_update.apply(this, [month, year]);
+			_update.call(this, month, year);
 		};
 		
 		// Moves the value forward by one month
 		var _next = function() {
-			var month = getMonthVal.apply(this), year = getYearVal.apply(this);
+			var month = getMonthVal.call(this), year = getYearVal.call(this);
 			if (month === 11) {
 				month = 0;
 				year++;
 			} else month++;
-			_update.apply(this, [month, year]);
+			_update.call(this, month, year);
 		};
 		
 		// Send back a constructor function
 		return function(input, args) {
-			_init.apply(this, [input, args]);
+			_init.call(this, input, args);
 		};
 	})();
 			

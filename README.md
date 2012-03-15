@@ -40,7 +40,9 @@ I welcome suggestions for improving this aspect of the plugin.
 
 Though keyboard accessibility is not broken by this plugin, the dialog itself is not accessible naturally through tab order.
 This mimics the behavior shown by the jQuery UI Datepicker, as far as I know.
+
 If I can find a better way I will, but in the meantime keyboard-only users will still be able to manually enter a value.
+Additionally, keyboard-only users can increment the month using the up arrow and decrement it by using the down arrow while the input has focus.
 
 TODO
 ----

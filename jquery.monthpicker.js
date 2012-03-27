@@ -152,6 +152,14 @@
               _this.prev();
               stop = true;
               break;
+            case 33: // Increase year with page up
+              _this.next('year');
+              stop = true;
+              break;
+            case 34: // Decrease year with page down
+              _this.prev('year');
+              stop = true;
+              break;
           }
           if (stop) e.preventDefault();
         })
@@ -224,23 +232,29 @@
       return parseInt(this.input.val().slice(0,4), 10);
     };
     
-    // Moves the value back by one month
-    var _prev = function() {
+    // Moves the value back by one month/year
+    var _prev = function(part) {
       var month = getMonthVal.call(this), year = getYearVal.call(this);
-      if (month === 0) {
-        month = 11;
-        year--;
-      } else month--;
+      if (part === 'year') year--;
+      else {
+        if (month === 0) {
+          month = 11;
+          year--;
+        } else month--;
+      }
       _update.call(this, month, year);
     };
     
-    // Moves the value forward by one month
-    var _next = function() {
+    // Moves the value forward by one month/year
+    var _next = function(part) {
       var month = getMonthVal.call(this), year = getYearVal.call(this);
-      if (month === 11) {
-        month = 0;
-        year++;
-      } else month++;
+      if (part === 'year') year++;
+      else {
+        if (month === 11) {
+          month = 0;
+          year++;
+        } else month++;
+      }
       _update.call(this, month, year);
     };
     
